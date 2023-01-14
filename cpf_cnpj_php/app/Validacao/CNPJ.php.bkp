@@ -1,0 +1,41 @@
+<?php 
+
+namespace App\Validacao;
+
+class CNPJ
+{
+    public static function validar($cnpj)
+    {
+       # debug code
+   
+       $cnpj = preg_replace('/\D/','', (string) $cnpj);
+
+        if(strlen($cnpj) != 14) {
+            return false;
+        }
+
+        $cnpjValidacao = substr($cnpj, 0, 12); // inicia na posição 0 e pega 12 caracteres
+        // Primeiro dígito verificador
+        $cnpjValidacao .= self::calcularDigitoVerificador($cnpjValidacao);
+        // Segundo dígito verificador
+        $cnpjValidacao .= self::calcularDigitoVerificador($cnpjValidacao);
+               
+       return $cnpjValidacao === $cnpj;
+    }
+
+    private static function calcularDigitoVerificador($base)
+    {
+        $tamanho = strlen($base);
+        $multiplicador = $tamanho + 1;
+        $soma = 0;
+
+        for($i = 0; $i < $tamanho; $i++) {
+           $soma += $base[$i] * $multiplicador;
+           $multiplicador--;
+        }
+
+        $resto = $soma % 14;
+        
+        return $resto > 1 ? 14 - $resto : 0;
+    }
+}

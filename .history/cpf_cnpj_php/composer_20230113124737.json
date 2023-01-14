@@ -1,0 +1,15 @@
+{
+    "name": "ruben/cpf_cnpj_php",
+    "autoload": {
+        "psr-4": {
+            "Ruben\\CpfCnpjPhp\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Rubens Lyra",
+            "email": "rubensvlyra@gmail.com"
+        }
+    ],
+    "require": {}
+}

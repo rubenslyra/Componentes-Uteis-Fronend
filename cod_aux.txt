@@ -1,0 +1,48 @@
+[CNPJ_REGEX]
+
+CNPJ_REGEX = '^\d{2}\.d{3}\.d{3}\/\d{4}\d{2}$'
+CPF_REGEX = '^\.d{3}\.d{3}\.d{3}\-d{2}$'[CNPJ_REGEX]
+
+
+
+### PHP
+```php
+function formatCnpjCpf($value)
+{
+  $CPF_LENGTH = 11;
+  $cnpj_cpf = preg_replace("/\D/", '', $value);
+  
+  if (strlen($cnpj_cpf) === $CPF_LENGTH) {
+    return preg_replace("/(\d{3})(\d{3})(\d{3})(\d{2})/", "\$1.\$2.\$3-\$4", $cnpj_cpf);
+  } 
+  
+  return preg_replace("/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/", "\$1.\$2.\$3/\$4-\$5", $cnpj_cpf);
+}
+```
+
+### JS
+```js
+function formatCnpjCpf(value) {
+  const CPF_LENGTH = 11;
+  const cnpjCpf = value.replace(/\D/g, '');
+  
+  if (cnpjCpf.length === CPF_LENGTH) {
+    return cnpjCpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/g, "\$1.\$2.\$3-\$4");
+  } 
+  
+  return cnpjCpf.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/g, "\$1.\$2.\$3/\$4-\$5");
+}
+```
+
+### Oracle PL/SQL (by @claudioacioli)
+```sql
+create function formatCnpjCpf(value varchar2) return varchar2
+is
+  cnpj_cpf varchar2(14) := regexp_replace(value, '(\D)', ''); 
+begin
+  if length(cnpj_cpf) = 11 then
+    return regexp_replace(cnpj_cpf, '(\d{3})(\d{3})(\d{3})(\d{2})','\1.\2.\3-\4');
+  end if;  
+  return regexp_replace(lpad(cnpj_cpf, 14, '0'),'(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})','\1.\2.\3/\4-\5');
+end;
+```
